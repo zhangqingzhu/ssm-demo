@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.chnsys.mapper.UserMapper">
+	 <resultMap type="cn.com.chnsys.pojo.User" id="userMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="pwd" property="pwd" jdbcType="VARCHAR" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 登录 -->
+	<select id="login" resultMap="userMap" parameterType="cn.com.chnsys.pojo.User">
+		select * from user where name=#{name} and pwd=#{pwd}
+	</select>
+	<!-- 查询所有用户信息 -->
+	<select id="findAllUser" resultMap="userMap" parameterType="cn.com.chnsys.pojo.User">
+		select id,name,age,phone from user
+	</select>
+	<!-- 添加用户信息 -->
+	<insert id="save" parameterType="cn.com.chnsys.pojo.User">  
+        insert into user(
+        <if test="name != null">name</if> 
+        <if test="pwd != null">,pwd</if> 
+        <if test="age != null">,age</if>
+        <if test="phone != null">,phone</if>  
+        ) values(
+        <if test="name != null"> #{name}</if> 
+        <if test="pwd != null">,#{pwd}</if>
+        <if test="age != null">,#{age}</if>
+        <if test="phone != null">,#{phone}</if> 
+        )  
+    </insert> 
+    <!-- 删除用户信息 -->
+    <delete id="delUser"  parameterType="int">
+    	delete from user where id=#{id}
+    </delete>
+    <!-- 根据ID查找单个用户信息 -->
+    <select id="findById" resultMap="userMap" parameterType="Integer">
+    	select * from user where id=#{id}
+    </select>
+    <!-- 更新用户信息 -->
+    <update id="updateUser" parameterType="cn.com.chnsys.pojo.User">
+    	update user 
+    	<set>
+    		<if test="name != null">name=#{name}</if>
+    		<if test="pwd != null">,pwd=#{pwd}</if>
+        	<if test="age != null">,age=#{age}</if>
+        	<if test="phone != null">,phone=#{phone}</if>
+    	</set>  
+    	where id=#{id}
+    </update>
+</mapper>
